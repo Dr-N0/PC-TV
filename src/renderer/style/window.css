@@ -1,3 +1,13 @@
+/* Variables */
+:root {
+    --color-one: #100007;
+    --color-two: #F67E7D;
+    --color-three: #A06CD5;
+    --color-four: #200116;
+    --color-five: #6247AA;
+}
+
+/* Top bar global button css */
 .titlebar {
     display: block;
     position: relative;
@@ -101,3 +111,28 @@
 .titlebar-light .titlebar-close:hover {
     background-color: rgba(232, 17, 35, 0.9);
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: .1px;
+    height: .1px;  
+    background-color: transparent;
+    color: transparent;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+}
+
+/* Background Particles */

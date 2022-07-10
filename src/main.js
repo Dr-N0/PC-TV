@@ -19,6 +19,7 @@ const createWindow = () => {
     frame: false,
     autoHideMenuBar: false,
     backgroundColor: '#2c2f33',
+    icon: __dirname + '/renderer/style/assets/pcTV.ico',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -39,9 +40,12 @@ const createWindow = () => {
     alwaysOnTop: true
   });
 
-  loading_window.loadFile(path.join(__dirname, 'loading.html'));
+  // =======================================
+  // Display loading window and main window
+  // =======================================
+  loading_window.loadFile(path.join(__dirname, './renderer/loading.html'));
   loading_window.on("ready-to-show", (e) => {
-    mainWindow.loadFile(path.join(__dirname, 'index.html'));
+    mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
     loading_window.focus();
     loading_window.show();
   })
@@ -51,9 +55,14 @@ const createWindow = () => {
     set_window_bounds(mainWindow, storage).then(() => {
       mainWindow.focus();
       mainWindow.show();
+
+      mainWindow.webContents.openDevTools();
     })
   });
 
+  // =======================================
+  // Main Window Controlls
+  // =======================================
   mainWindow.on("resize", (r) => {
     storage.set("screen-last-pos", mainWindow.getBounds())
   })
@@ -83,9 +92,6 @@ const createWindow = () => {
       app.quit()
     })
   });
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
