@@ -55,8 +55,6 @@ const createWindow = () => {
     set_window_bounds(mainWindow, storage).then(() => {
       mainWindow.focus();
       mainWindow.show();
-
-      mainWindow.webContents.openDevTools();
     })
   });
 
@@ -92,6 +90,9 @@ const createWindow = () => {
       app.quit()
     })
   });
+
+  // Open Dev Tools
+  // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished

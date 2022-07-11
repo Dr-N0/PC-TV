@@ -1,21 +1,28 @@
+const { shell } = require('electron');
+
 let login_page = document.getElementById("login-section");
 let search_page = document.getElementById("search-section");
 let connected_page = document.getElementById("connected-section");
 let current_page = "login";
 
-const loginForm = document.getElementById("login-form");
-const loginButton = document.getElementById("login-form-submit");
-const loginErrorMsg = document.getElementById("login-error-msg");
+let login_form = document.getElementById("login-form");
+let search_button = document.getElementById("search-btn")
 
 // Authenticate user
-loginButton.addEventListener("click", (e) => {
+login_form.addEventListener("submit", (e) => {
   e.preventDefault();
-  const username = loginForm.username.value;
-  const password = loginForm.password.value;
+  const username = login_form.username.value;
+  const password = login_form.password.value;
 
-  if (username === "user" && password === "web_dev") {
+  if (username === "u" && password === "p") {
       load_search_page();
   }
+})
+
+search_button.addEventListener("click", (e) => {
+  e.preventDefault();
+  
+  load_connected_page();
 })
 
 function load_login_page() {
@@ -24,7 +31,7 @@ function load_login_page() {
       login_page.classList.remove("hidden");
       current_page = "login";
 
-      login_page.classList.add("animate-in")
+      login_page.classList.add("animate-in");
       setTimeout(() => {
         login_page.classList.remove("animate-in");
       }, 1500)
@@ -37,7 +44,7 @@ function load_search_page() {
       search_page.classList.remove("hidden");
       current_page = "search";
 
-      search_page.classList.add("animate-in")
+      search_page.classList.add("animate-in");
       setTimeout(() => {
         search_page.classList.remove("animate-in");
       }, 1500)
@@ -50,7 +57,7 @@ function load_connected_page() {
       connected_page.classList.remove("hidden");
       current_page = "connected";
 
-      connected_page.classList.add("animate-in")
+      connected_page.classList.add("animate-in");
       setTimeout(() => {
         connected_page.classList.remove("animate-in");
       }, 1500)
