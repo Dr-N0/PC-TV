@@ -161,6 +161,7 @@ ipcMain.handle("searchForDevice", () => {
       console.log(`BODY: ${chunk}`)
     });
   });
+
   request.on('finish', () => {
     console.log('Request is Finished')
   });
@@ -170,12 +171,31 @@ ipcMain.handle("searchForDevice", () => {
   request.on('error', (error) => {
     console.log(`ERROR: ${JSON.stringify(error)}`)
   });
+
   request.on('close', (error) => {
     console.log('Last Transaction has occurred')
   });
+
   request.setHeader('Content-Type', 'application/json');
   request.end();
-  // var body = JSON.stringify({ key: 1 });
+});
+
+function set_window_bounds (mainWindow, storage) {
+  return new Promise((resolve, reject) => {
+    storage.get("screen-last-pos", (err, data) => {
+      if (!err) {
+          if (data.x == undefined) {
+            storage.set("screen-last-pos", mainWindow.getBounds())
+          } else {
+            mainWindow.setBounds(data)
+          }
+      }
+      resolve()
+    })
+  })
+}
+
+// var body = JSON.stringify({ key: 1 });
   //   const request = net.request({
   //       method: 'POST',
   //       protocol: 'http:',
@@ -206,19 +226,3 @@ ipcMain.handle("searchForDevice", () => {
   //   request.setHeader('Content-Type', 'application/json');
   //   request.write(body, 'utf-8');
   //   request.end();
-});
-
-function set_window_bounds (mainWindow, storage) {
-  return new Promise((resolve, reject) => {
-    storage.get("screen-last-pos", (err, data) => {
-      if (!err) {
-          if (data.x == undefined) {
-            storage.set("screen-last-pos", mainWindow.getBounds())
-          } else {
-            mainWindow.setBounds(data)
-          }
-      }
-      resolve()
-    })
-  })
-}
