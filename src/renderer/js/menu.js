@@ -1,11 +1,9 @@
-// const ipcRenderer = window.ipcRenderer;
-const {ipcRenderer} = require('electron');
 /**
  * Sends IPC call to window.close() and will also call app.close() after all processes end.
  * @function
  */
 function close_app() {
-    ipcRenderer.send("close-btn", true);
+    window.bridge.close_app();
 }
 
 /**
@@ -13,7 +11,7 @@ function close_app() {
  * @function
  */
  function maximize_app() {
-    ipcRenderer.send("maximize-btn", true);
+    window.bridge.maximize_app();
 }
 
 /**
@@ -21,5 +19,5 @@ function close_app() {
  * @function
  */
 function minimize_app() {
-    ipcRenderer.send("minimize-btn", true);
+    window.bridge.minimize_app();
 }

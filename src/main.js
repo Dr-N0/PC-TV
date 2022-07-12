@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, net } = require('electron');
 const path = require('path');
 const storage = require('electron-json-storage');
 
@@ -7,6 +7,14 @@ const storage = require('electron-json-storage');
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+// SSL/TSL: this is the self signed certificate support
+app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
+  // On certificate error we disable default behaviour (stop loading the page)
+  // and we then say "it is all fine - true" to the callback
+  console.log('alsdjfklasdfjlksfadjkljkl')
+  event.preventDefault();
+  callback(true);
+});
 
 const createWindow = () => {
   // Create the browser window.
@@ -17,14 +25,15 @@ const createWindow = () => {
     height: 668,
     show: false,
     frame: false,
+    center: true,
     autoHideMenuBar: false,
     backgroundColor: '#2c2f33',
     icon: __dirname + '/renderer/style/assets/pcTV.ico',
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      // nodeIntegration: false,
+      // contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
-    },
+    }
   });
 
   // create a new `loading_window`-Window 
@@ -35,6 +44,7 @@ const createWindow = () => {
     height: 230,
     frame: false,
     show: false,
+    center: true,
     autoHideMenuBar: true,
     backgroundColor: '#2c2f33',
     alwaysOnTop: true
@@ -91,8 +101,18 @@ const createWindow = () => {
     })
   });
 
+  // Certificate Manager
+  mainWindow.webContents.session.setCertificateVerifyProc((request, callback) => {
+    var { hostname, certificate, validatedCertificate, verificationResult, errorCode } = request;
+
+    // Calling callback(0) accepts the certificate, calling callback(-2) rejects it.
+    if (isNotMyCertificate(hostname, certificate)) { callback(-2); return; }
+    
+    callback(0);
+  });
+
   // Open Dev Tools
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -115,6 +135,77 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+// app.commandLine.appendSwitch('ignore-certificate-errors');
+
+function isNotMyCertificate(hostname, certificate){
+  if(hostname === 'boredapi.com'){
+    return false;
+  }
+}
+
+ipcMain.handle("searchForDevice", () => {
+  const request = net.request({
+    method: 'GET',
+    protocol: 'https:',
+    hostname: 'boredapi.com',
+    path: '/api/activity/',
+    redirect: 'follow'
+  });
+  request.on('response', (response) => {
+    console.log(`STATUS: ${response.statusCode}`);
+    console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+
+    response.on('data', (chunk) => {
+      console.log(`BODY: ${chunk}`)
+    });
+  });
+  request.on('finish', () => {
+    console.log('Request is Finished')
+  });
+  request.on('abort', () => {
+    console.log('Request is Aborted')
+  });
+  request.on('error', (error) => {
+    console.log(`ERROR: ${JSON.stringify(error)}`)
+  });
+  request.on('close', (error) => {
+    console.log('Last Transaction has occurred')
+  });
+  request.setHeader('Content-Type', 'application/json');
+  request.end();
+  // var body = JSON.stringify({ key: 1 });
+  //   const request = net.request({
+  //       method: 'POST',
+  //       protocol: 'http:',
+  //       hostname: 'httpbin.org',
+  //       path: '/post',
+  //       redirect: 'follow'
+  //   });
+  //   request.on('response', (response) => {
+  //       console.log(`STATUS: ${response.statusCode}`);
+  //       console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+ 
+  //       response.on('data', (chunk) => {
+  //           console.log(`BODY: ${chunk}`)
+  //       });
+  //   });
+  //   request.on('finish', () => {
+  //       console.log('Request is Finished')
+  //   });
+  //   request.on('abort', () => {
+  //       console.log('Request is Aborted')
+  //   });
+  //   request.on('error', (error) => {
+  //       console.log(`ERROR: ${JSON.stringify(error)}`)
+  //   });
+  //   request.on('close', (error) => {
+  //       console.log('Last Transaction has occurred')
+  //   });
+  //   request.setHeader('Content-Type', 'application/json');
+  //   request.write(body, 'utf-8');
+  //   request.end();
 });
 
 function set_window_bounds (mainWindow, storage) {

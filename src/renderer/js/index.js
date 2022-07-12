@@ -1,5 +1,3 @@
-const { shell } = require('electron');
-
 let login_page = document.getElementById("login-section");
 let search_page = document.getElementById("search-section");
 let connected_page = document.getElementById("connected-section");
@@ -24,6 +22,10 @@ search_button.addEventListener("click", (e) => {
   
   load_connected_page();
 })
+
+function searchForDevice() {
+  window.bridge.searchForDevice();
+}
 
 function load_login_page() {
   if(current_page != "login") {
