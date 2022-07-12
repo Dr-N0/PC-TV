@@ -1,20 +1,18 @@
 const { app, BrowserWindow, ipcMain, net } = require('electron');
 const path = require('path');
 const storage = require('electron-json-storage');
+const gotTheLock = app.requestSingleInstanceLock();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
-// SSL/TSL: this is the self signed certificate support
-app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
-  // On certificate error we disable default behaviour (stop loading the page)
-  // and we then say "it is all fine - true" to the callback
-  console.log('alsdjfklasdfjlksfadjkljkl')
-  event.preventDefault();
-  callback(true);
-});
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+const isDev = process.env.NODE_ENV == 'develop';
 
 const createWindow = () => {
   // Create the browser window.
@@ -30,8 +28,9 @@ const createWindow = () => {
     backgroundColor: '#2c2f33',
     icon: __dirname + '/renderer/style/assets/pcTV.ico',
     webPreferences: {
-      // nodeIntegration: false,
-      // contextIsolation: true,
+      nodeIntegration: false,
+      contextIsolation: true,
+      devTools: isDev,
       preload: path.join(__dirname, 'preload.js'),
     }
   });
@@ -47,8 +46,16 @@ const createWindow = () => {
     center: true,
     autoHideMenuBar: true,
     backgroundColor: '#2c2f33',
-    alwaysOnTop: true
+    alwaysOnTop: true,
+    webPreferences: {
+      devTools: false,
+    }
   });
+
+  // Open Dev Tools
+  if (isDev){
+    mainWindow.webContents.openDevTools();
+  }
 
   // =======================================
   // Display loading window and main window
@@ -58,7 +65,7 @@ const createWindow = () => {
     mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
     loading_window.focus();
     loading_window.show();
-  })
+  });
 
   mainWindow.once('ready-to-show', () => {
     loading_window.destroy();
@@ -73,11 +80,11 @@ const createWindow = () => {
   // =======================================
   mainWindow.on("resize", (r) => {
     storage.set("screen-last-pos", mainWindow.getBounds())
-  })
+  });
 
   mainWindow.on("moved", (e) => {
     storage.set("screen-last-pos", mainWindow.getBounds())
-  })
+  });
 
   ipcMain.on("minimize-btn", (event, arg) => {
     mainWindow.minimize()
@@ -110,15 +117,22 @@ const createWindow = () => {
     
     callback(0);
   });
-
-  // Open Dev Tools
-  mainWindow.webContents.openDevTools();
 };
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+    
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (myWindow) {
+      if (myWindow.isMinimized()) myWindow.restore()
+      myWindow.focus();
+    }
+  })
+    
+  // Create myWindow, load the rest of the app, etc...
+  app.on('ready', createWindow);
+}
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -180,19 +194,19 @@ ipcMain.handle("searchForDevice", () => {
   request.end();
 });
 
-function set_window_bounds (mainWindow, storage) {
+function set_window_bounds(mainWindow, storage) {
   return new Promise((resolve, reject) => {
     storage.get("screen-last-pos", (err, data) => {
       if (!err) {
           if (data.x == undefined) {
-            storage.set("screen-last-pos", mainWindow.getBounds())
+            storage.set("screen-last-pos", mainWindow.getBounds());
           } else {
-            mainWindow.setBounds(data)
+            mainWindow.setBounds(data);
           }
       }
-      resolve()
-    })
-  })
+      resolve();
+    });
+  });
 }
 
 // var body = JSON.stringify({ key: 1 });

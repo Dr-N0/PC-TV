@@ -2,6 +2,7 @@ let login_page = document.getElementById("login-section");
 let search_page = document.getElementById("search-section");
 let connected_page = document.getElementById("connected-section");
 let current_page = "login";
+let logged_in = false;
 
 let login_form = document.getElementById("login-form");
 let search_button = document.getElementById("search-btn")
@@ -13,7 +14,8 @@ login_form.addEventListener("submit", (e) => {
   const password = login_form.password.value;
 
   if (username === "u" && password === "p") {
-      load_search_page();
+    logged_in = true;
+    load_search_page();
   }
 })
 
@@ -28,7 +30,7 @@ function searchForDevice() {
 }
 
 function load_login_page() {
-  if(current_page != "login") {
+  if(current_page != "login" && logged_in == false) {
       hide_all_pages();
       login_page.classList.remove("hidden");
       current_page = "login";
@@ -41,7 +43,7 @@ function load_login_page() {
 }
 
 function load_search_page() {
-  if(current_page != "search") {
+  if(current_page != "search" && logged_in == true) {
       hide_all_pages();
       search_page.classList.remove("hidden");
       current_page = "search";
@@ -54,7 +56,7 @@ function load_search_page() {
 }
 
 function load_connected_page() {
-  if(current_page != "connected") {
+  if(current_page != "connected" && logged_in == true) {
       hide_all_pages();
       connected_page.classList.remove("hidden");
       current_page = "connected";
