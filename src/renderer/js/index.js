@@ -5,7 +5,7 @@ let current_page = "login";
 let logged_in = false;
 
 let login_form = document.getElementById("login-form");
-let search_button = document.getElementById("search-btn")
+let search_button = document.getElementById("search-btn");
 
 // Authenticate user
 login_form.addEventListener("submit", (e) => {

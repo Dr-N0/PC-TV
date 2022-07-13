@@ -1,7 +1,8 @@
+if (process.env.NODE_ENV !== 'production') require('dotenv').config()
 const { app, BrowserWindow, ipcMain, net } = require('electron');
+const fetch = require('node-fetch');
 const path = require('path');
 const storage = require('electron-json-storage');
-const gotTheLock = app.requestSingleInstanceLock();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
@@ -9,10 +10,9 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
 const isDev = process.env.NODE_ENV === 'develop';
+const gotTheLock = app.requestSingleInstanceLock();
+const isWifi = net.online;
 
 const createWindow = () => {
   // Create the browser window.
@@ -159,39 +159,54 @@ function isNotMyCertificate(hostname, certificate){
   }
 }
 
-ipcMain.handle("searchForDevice", () => {
-  const request = net.request({
-    method: 'GET',
-    protocol: 'https:',
-    hostname: 'boredapi.com',
-    path: '/api/activity/',
-    redirect: 'follow'
-  });
-  request.on('response', (response) => {
-    console.log(`STATUS: ${response.statusCode}`);
-    console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
+ipcMain.handle("searchForDevice", async () => {
+  if(isWifi){
+    // ===== LET MAIN SERVER KNOW YOU'RE LOOKING
+    try {
+      const res = await fetch('http://localhost:8080/');
+      const headerDate = res.headers && res.headers.get('date') ? res.headers.get('date') : 'no response date';
+      console.log('Status Code:', res.status);
+      console.log('Date in Response header:', headerDate);
+  
+      const users = await res.json();
+      for(user of users) {
+        console.log(`Got user with id: ${user.id}, name: ${user.name}`);
+      }
+    } catch (err) {
+      console.log(err.message); //can be console.error
+    }
+    // var body = JSON.stringify({ key: 1 });
+    // const request = net.request({
+    //     method: 'POST',
+    //     protocol: 'http:',
+    //     hostname: 'localhost:5000',
+    //     path: '',
+    //     redirect: 'follow'
+    // });
+    // request.on('response', (response) => {
+    //     console.log(`STATUS: ${response.statusCode}`);
+    //     console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
 
-    response.on('data', (chunk) => {
-      console.log(`BODY: ${chunk}`)
-    });
-  });
-
-  request.on('finish', () => {
-    console.log('Request is Finished')
-  });
-  request.on('abort', () => {
-    console.log('Request is Aborted')
-  });
-  request.on('error', (error) => {
-    console.log(`ERROR: ${JSON.stringify(error)}`)
-  });
-
-  request.on('close', (error) => {
-    console.log('Last Transaction has occurred')
-  });
-
-  request.setHeader('Content-Type', 'application/json');
-  request.end();
+    //     response.on('data', (chunk) => {
+    //         console.log(`BODY: ${chunk}`)
+    //     });
+    // });
+    // request.on('finish', () => {
+    //     console.log('Request is Finished')
+    // });
+    // request.on('abort', () => {
+    //     console.log('Request is Aborted')
+    // });
+    // request.on('error', (error) => {
+    //     console.log(`ERROR: ${JSON.stringify(error)}`)
+    // });
+    // request.on('close', (error) => {
+    //     console.log('Last Transaction has occurred')
+    // });
+    // request.setHeader('Content-Type', 'application/json');
+    // request.write(body, 'utf-8');
+    // request.end();
+  }
 });
 
 function set_window_bounds(mainWindow, storage) {
@@ -208,35 +223,3 @@ function set_window_bounds(mainWindow, storage) {
     });
   });
 }
-
-// var body = JSON.stringify({ key: 1 });
-  //   const request = net.request({
-  //       method: 'POST',
-  //       protocol: 'http:',
-  //       hostname: 'httpbin.org',
-  //       path: '/post',
-  //       redirect: 'follow'
-  //   });
-  //   request.on('response', (response) => {
-  //       console.log(`STATUS: ${response.statusCode}`);
-  //       console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
- 
-  //       response.on('data', (chunk) => {
-  //           console.log(`BODY: ${chunk}`)
-  //       });
-  //   });
-  //   request.on('finish', () => {
-  //       console.log('Request is Finished')
-  //   });
-  //   request.on('abort', () => {
-  //       console.log('Request is Aborted')
-  //   });
-  //   request.on('error', (error) => {
-  //       console.log(`ERROR: ${JSON.stringify(error)}`)
-  //   });
-  //   request.on('close', (error) => {
-  //       console.log('Last Transaction has occurred')
-  //   });
-  //   request.setHeader('Content-Type', 'application/json');
-  //   request.write(body, 'utf-8');
-  //   request.end();
