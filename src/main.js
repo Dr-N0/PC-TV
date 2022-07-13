@@ -12,7 +12,7 @@ if (require('electron-squirrel-startup')) {
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
-const isDev = process.env.NODE_ENV == 'develop';
+const isDev = process.env.NODE_ENV === 'develop';
 
 const createWindow = () => {
   // Create the browser window.
