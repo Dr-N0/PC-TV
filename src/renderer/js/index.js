@@ -22,7 +22,7 @@ login_form.addEventListener("submit", (e) => {
 search_button.addEventListener("click", (e) => {
   e.preventDefault();
   
-  load_connected_page();
+  // load_connected_page();
 })
 
 function searchForDevice() {

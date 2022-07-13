@@ -88,4 +88,5 @@ typings/
 # Electron-Forge
 out/
 
-websocket-save/
+# Local node server
+# server/

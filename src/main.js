@@ -13,10 +13,11 @@ if (require('electron-squirrel-startup')) {
 const isDev = process.env.NODE_ENV === 'develop';
 const gotTheLock = app.requestSingleInstanceLock();
 const isWifi = net.online;
+let mainWindow, loading_window;
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     minWidth: 650,
     minHeight: 470,
     width: 982,
@@ -36,7 +37,7 @@ const createWindow = () => {
   });
 
   // create a new `loading_window`-Window 
-  const loading_window = new BrowserWindow({
+  loading_window = new BrowserWindow({
     minWidth: 170,
     minHeight: 170,
     width: 230,
@@ -124,9 +125,9 @@ if (!gotTheLock) {
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
     // Someone tried to run a second instance, we should focus our window.
-    if (myWindow) {
-      if (myWindow.isMinimized()) myWindow.restore()
-      myWindow.focus();
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus();
     }
   })
     
@@ -163,13 +164,19 @@ ipcMain.handle("searchForDevice", async () => {
   if(isWifi){
     // ===== LET MAIN SERVER KNOW YOU'RE LOOKING
     try {
-      const res = await fetch('http://localhost:5000/');
-      const headerDate = res.headers && res.headers.get('date') ? res.headers.get('date') : 'no response date';
-      console.log('Status Code:', res.status);
-      console.log('Date in Response header:', headerDate);
-  
-      const users = await res.text();
-      console.log(users);
+      const body = {
+        login_token: "test-token:happybirthday1234123",
+        device_token: "device-token:oogabooga",
+        searching: true
+      };
+      const response = await fetch('http://localhost:5000/', {
+        method: 'post',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+      });
+      const data = await response.json();
+
+      console.log(data);
     } catch (err) {
       console.log(err.message); //can be console.error
     }
