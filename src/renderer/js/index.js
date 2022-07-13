@@ -2,31 +2,86 @@ let login_page = document.getElementById("login-section");
 let search_page = document.getElementById("search-section");
 let connected_page = document.getElementById("connected-section");
 let current_page = "login";
-let logged_in = false;
+let logged_in, register = false;
 
 let login_form = document.getElementById("login-form");
+let login_form_submit = document.getElementById("login-form-submit");
 let search_button = document.getElementById("search-btn");
+let toggle_register_button = document.getElementById("toggle_register_button");
+let toggle_login_button = document.getElementById("toggle_login_button");
+let display = document.querySelector('.error')
 
 // Authenticate user
-login_form.addEventListener("submit", (e) => {
+login_form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const username = login_form.username.value;
   const password = login_form.password.value;
+  if(register == true){
+    e.preventDefault()
+    display.textContent = ''
 
-  if (username === "u" && password === "p") {
-    logged_in = true;
-    load_search_page();
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ "username": username, "password": password }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      const data = await res.json();
+
+      if(res.status === 400 || res.status === 401){
+        return display.textContent = `${data.message}. ${data.error ? data.error : ''}`
+      }
+
+      logged_in = true;
+      load_search_page();
+    } catch (err) {
+      console.log(err.message)
+    }
+  } else if (register == false){
+    display.textContent = ''
+
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ "username": username, "password": password }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      const data = await res.json();
+
+      if (res.status === 400 || res.status === 401) {
+        return display.textContent = `${data.message}. ${data.error ? data.error : ''}`
+      }
+
+      logged_in = true;
+      load_search_page();
+    } catch (err) {
+      console.log(err.message)
+    }
+  } else {
+    console.log("Can't log in");
   }
 })
 
 search_button.addEventListener("click", (e) => {
   e.preventDefault();
   
-  // load_connected_page();
+  load_connected_page();
 })
 
-function searchForDevice() {
-  window.bridge.searchForDevice();
+function toggle_sign_in(e) {
+  if(e == "register"){
+    register = true;
+    login_form_submit.value = "Register";
+    toggle_register_button.classList.toggle("hidden");
+    toggle_login_button.classList.toggle("hidden");
+  } else if (e == "login"){
+    register = false;
+    login_form_submit.value = "Log In";
+    toggle_register_button.classList.toggle("hidden");
+    toggle_login_button.classList.toggle("hidden");
+  }
 }
 
 function load_login_page() {

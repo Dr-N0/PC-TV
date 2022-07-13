@@ -1,8 +1,8 @@
 const { contextBridge, ipcMain, ipcRenderer} = require('electron')
 
 let bridge = {
-    searchForDevice: async () => {
-        var result = await ipcRenderer.invoke("searchForDevice");
+    search_for_device: async () => {
+        var result = await ipcRenderer.invoke("search_for_device");
     },
     close_app: () => {
         ipcRenderer.send("close-btn", true);

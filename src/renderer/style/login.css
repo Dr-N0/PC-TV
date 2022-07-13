@@ -90,9 +90,12 @@ input[type='submit'] {
 }
 
 .form input[type='password'],
-.form input[type='text'],
-.form input[type='submit'] {
+.form input[type='text'] {
     width: 100%;
+}
+
+.form input[type='submit']{
+    width: 60%;
 }
 
 .form_field {
@@ -119,9 +122,17 @@ input[type='submit'] {
 
 .login label,
 .login input[type='text'],
-.login input[type='password'],
-.login input[type='submit'] {
+.login input[type='password'] {
     border-radius: 0.25rem;
+    padding: 16px;
+    padding: 1rem;
+}
+
+.login input[type='submit'] {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
     padding: 16px;
     padding: 1rem;
 }
@@ -150,14 +161,36 @@ input[type='submit'] {
     background-color: #434a52;
 }
 
-.login input[type='submit'] {
+.login input[type='submit'], .swap-button {
     background-color: var(--color-two);
     color: #eee;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
 }
 
 .login input[type='submit']:focus,
-.login input[type='submit']:hover {
+.login input[type='submit']:hover, .swap-button:focus, .swap-button:hover {
     background-color: #d16a6a;
+}
+
+/* Swap Button */
+
+.swap-button {
+    padding: 16px;
+    padding: 1rem;
+    width: 40%;
+    cursor: pointer;
+    background-image: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 0;
+    outline: 0;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    transition: background-color 0.3s;
 }

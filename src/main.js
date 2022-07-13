@@ -1,6 +1,9 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config()
+if (process.env.NODE_ENV !== 'production'){
+  require('dotenv').config();
+}
 const { app, BrowserWindow, ipcMain, net } = require('electron');
 const fetch = require('node-fetch');
+const https = require('https');
 const path = require('path');
 const storage = require('electron-json-storage');
 
@@ -10,7 +13,7 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const isDev = process.env.NODE_ENV === 'develop';
+const isDev = process.env.NODE_ENV == 'develop';
 const gotTheLock = app.requestSingleInstanceLock();
 const isWifi = net.online;
 let mainWindow, loading_window;
@@ -74,6 +77,7 @@ const createWindow = () => {
       mainWindow.focus();
       mainWindow.show();
     })
+    mainWindow.focus();
   });
 
   // =======================================
@@ -107,16 +111,6 @@ const createWindow = () => {
       console.log('quitting app but saving settings first')
       app.quit()
     })
-  });
-
-  // Certificate Manager
-  mainWindow.webContents.session.setCertificateVerifyProc((request, callback) => {
-    var { hostname, certificate, validatedCertificate, verificationResult, errorCode } = request;
-
-    // Calling callback(0) accepts the certificate, calling callback(-2) rejects it.
-    if (isNotMyCertificate(hostname, certificate)) { callback(-2); return; }
-    
-    callback(0);
   });
 };
     
@@ -152,15 +146,11 @@ app.on('activate', () => {
   }
 });
 
-// app.commandLine.appendSwitch('ignore-certificate-errors');
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false,
+});
 
-function isNotMyCertificate(hostname, certificate){
-  if(hostname === 'boredapi.com'){
-    return false;
-  }
-}
-
-ipcMain.handle("searchForDevice", async () => {
+ipcMain.handle("search_for_device", async () => {
   if(isWifi){
     // ===== LET MAIN SERVER KNOW YOU'RE LOOKING
     try {
@@ -169,10 +159,11 @@ ipcMain.handle("searchForDevice", async () => {
         device_token: "device-token:oogabooga",
         searching: true
       };
-      const response = await fetch('http://localhost:5000/', {
-        method: 'post',
-        body: JSON.stringify(body),
-        headers: {'Content-Type': 'application/json'}
+      const response = await fetch('https://www.boredapi.com/api/activity/', {
+        method: 'get',
+        headers: {'Content-Type': 'application/json'},
+        // body: JSON.stringify(body)
+        agent: httpsAgent
       });
       const data = await response.json();
 
