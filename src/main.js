@@ -163,49 +163,16 @@ ipcMain.handle("searchForDevice", async () => {
   if(isWifi){
     // ===== LET MAIN SERVER KNOW YOU'RE LOOKING
     try {
-      const res = await fetch('http://localhost:8080/');
+      const res = await fetch('http://localhost:5000/');
       const headerDate = res.headers && res.headers.get('date') ? res.headers.get('date') : 'no response date';
       console.log('Status Code:', res.status);
       console.log('Date in Response header:', headerDate);
   
-      const users = await res.json();
-      for(user of users) {
-        console.log(`Got user with id: ${user.id}, name: ${user.name}`);
-      }
+      const users = await res.text();
+      console.log(users);
     } catch (err) {
       console.log(err.message); //can be console.error
     }
-    // var body = JSON.stringify({ key: 1 });
-    // const request = net.request({
-    //     method: 'POST',
-    //     protocol: 'http:',
-    //     hostname: 'localhost:5000',
-    //     path: '',
-    //     redirect: 'follow'
-    // });
-    // request.on('response', (response) => {
-    //     console.log(`STATUS: ${response.statusCode}`);
-    //     console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
-
-    //     response.on('data', (chunk) => {
-    //         console.log(`BODY: ${chunk}`)
-    //     });
-    // });
-    // request.on('finish', () => {
-    //     console.log('Request is Finished')
-    // });
-    // request.on('abort', () => {
-    //     console.log('Request is Aborted')
-    // });
-    // request.on('error', (error) => {
-    //     console.log(`ERROR: ${JSON.stringify(error)}`)
-    // });
-    // request.on('close', (error) => {
-    //     console.log('Last Transaction has occurred')
-    // });
-    // request.setHeader('Content-Type', 'application/json');
-    // request.write(body, 'utf-8');
-    // request.end();
   }
 });
 
