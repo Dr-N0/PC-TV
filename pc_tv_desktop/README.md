@@ -1,2 +1,2 @@
-# PC-TV
-A project for my living room
+# PC-TV-Desktop
+Electron app for my living room
