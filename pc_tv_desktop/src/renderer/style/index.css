@@ -9,9 +9,9 @@ body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-size: 300% 300%;
-    background-image: linear-gradient(-45deg, var(--color-two) 0%, var(--color-three) 50%, var(--color-five) 100%);
-    -webkit-animation: gradient 20s ease infinite;
-    animation: gradient 20s ease infinite;
+    background-image: linear-gradient(-45deg, var(--color-two) 0%, var(--color-three) 60%, var(--color-five) 100%);
+    -webkit-animation: gradient 15s ease infinite;
+    animation: gradient 15s ease infinite;
     -webkit-app-region: no-drag;
 }
 
