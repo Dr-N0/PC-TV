@@ -1,11 +1,12 @@
-if (process.env.NODE_ENV !== 'production'){
-  require('dotenv').config();
-}
 const { app, BrowserWindow, ipcMain, net } = require('electron');
 const fetch = require('node-fetch');
 const https = require('https');
 const path = require('path');
 const storage = require('electron-json-storage');
+
+if (process.env.NODE_ENV !== 'production'){
+  require('dotenv').config();
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line global-require
