@@ -61,8 +61,7 @@ const createWindow = () => {
   // =======================================
   loading_window.loadFile(path.join(__dirname, './renderer/loading.html'));
   loading_window.on("ready-to-show", (e) => {
-    mainWindow.loadFile(path.join(__dirname, './renderer/connected.html'));
-    // mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
+    mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
     loading_window.focus();
     loading_window.show();
   });
