@@ -1,7 +1,6 @@
 let login_page = document.getElementById("login-section");
 let search_page = document.getElementById("search-section");
 let searching_page = document.getElementById("searching-section");
-let connected_page = document.getElementById("connected-section");
 let current_page = "login";
 let logged_in, register = false;
 
@@ -109,14 +108,6 @@ function load_searching_page() {
   }
 }
 
-function load_connected_page() {
-  if(current_page != "connected" && logged_in == true) {
-      hide_all_pages();
-      connected_page.classList.remove("hidden");
-      current_page = "connected";
-  }
-}
-
 /**
  * display = None to all of the pages and outer containers for pages.
  * @function
@@ -124,5 +115,5 @@ function load_connected_page() {
 function hide_all_pages() {
   login_page.classList.add("hidden");
   search_page.classList.add("hidden");
-  connected_page.classList.add("hidden");
+  searching_page.classList.add("hidden");
 }

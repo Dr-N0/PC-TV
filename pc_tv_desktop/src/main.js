@@ -56,17 +56,13 @@ const createWindow = () => {
     }
   });
 
-  // Open Dev Tools
-  if (isDev){
-    mainWindow.webContents.openDevTools();
-  }
-
   // =======================================
   // Display loading window and main window
   // =======================================
   loading_window.loadFile(path.join(__dirname, './renderer/loading.html'));
   loading_window.on("ready-to-show", (e) => {
-    mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
+    mainWindow.loadFile(path.join(__dirname, './renderer/connected.html'));
+    // mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
     loading_window.focus();
     loading_window.show();
   });
@@ -107,10 +103,7 @@ const createWindow = () => {
 
   ipcMain.on("close-btn", (event, arg) => {
     storage.set("screen-last-pos", mainWindow.getBounds());
-    storage.set("screen-last-pos", mainWindow.getBounds(), (err, data) => {
-      console.log('quitting app but saving settings first')
-      app.quit()
-    })
+    app.quit();
   });
 
   ipcMain.handle("search_for_device", async () => {
@@ -139,8 +132,13 @@ const createWindow = () => {
       }
     }
   });
+
+  // Open Dev Tools
+  if (isDev){
+    mainWindow.webContents.openDevTools();
+  }
 };
-    
+
 if (!gotTheLock) {
   app.quit()
 } else {
