@@ -1,6 +1,5 @@
-const { app, BrowserWindow, ipcMain, net } = require('electron');
+const { app, BrowserWindow, ipcMain, net, shell } = require('electron');
 const fetch = require('node-fetch');
-const https = require('https');
 const path = require('path');
 const storage = require('electron-json-storage');
 
@@ -113,6 +112,33 @@ const createWindow = () => {
       app.quit()
     })
   });
+
+  ipcMain.handle("search_for_device", async () => {
+    if(isWifi){
+      // ===== LET MAIN SERVER KNOW YOU'RE LOOKING
+      try {
+        const body = {
+          login_token: "test-token:happybirthday1234123",
+          device_token: "device-token:oogabooga",
+          searching: true
+        };
+        const response = await fetch('http://localhost:5000/api/pc_searching', {
+          method: 'post',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(body)
+        });
+        const data = await response.json();
+
+        if(data.connected == true){
+          mainWindow.loadFile(path.join(__dirname, './renderer/connected.html'));
+        }else{
+          console.log("Didn't work")
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+  });
 };
     
 if (!gotTheLock) {
@@ -144,34 +170,6 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
-  }
-});
-
-const httpsAgent = new https.Agent({
-  rejectUnauthorized: false,
-});
-
-ipcMain.handle("search_for_device", async () => {
-  if(isWifi){
-    // ===== LET MAIN SERVER KNOW YOU'RE LOOKING
-    try {
-      const body = {
-        login_token: "test-token:happybirthday1234123",
-        device_token: "device-token:oogabooga",
-        searching: true
-      };
-      const response = await fetch('https://www.boredapi.com/api/activity/', {
-        method: 'get',
-        headers: {'Content-Type': 'application/json'},
-        // body: JSON.stringify(body)
-        agent: httpsAgent
-      });
-      const data = await response.json();
-
-      console.log(data);
-    } catch (err) {
-      console.log(err.message); //can be console.error
-    }
   }
 });
 

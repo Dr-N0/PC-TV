@@ -13,6 +13,7 @@ connectDB();
 app.use(express.json());
 
 // Routes
+app.use("/api", require("./Connect/route"));
 app.use("/api/auth", require("./Auth/route"));
 
 const server = app.listen(PORT, () =>

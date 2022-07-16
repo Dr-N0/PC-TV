@@ -1,5 +1,6 @@
 let login_page = document.getElementById("login-section");
 let search_page = document.getElementById("search-section");
+let searching_page = document.getElementById("searching-section");
 let connected_page = document.getElementById("connected-section");
 let current_page = "login";
 let logged_in, register = false;
@@ -67,7 +68,7 @@ login_form.addEventListener("submit", async (e) => {
 search_button.addEventListener("click", (e) => {
   e.preventDefault();
   
-  load_connected_page();
+  load_searching_page();
 })
 
 function toggle_sign_in(e) {
@@ -89,11 +90,6 @@ function load_login_page() {
       hide_all_pages();
       login_page.classList.remove("hidden");
       current_page = "login";
-
-      login_page.classList.add("animate-in");
-      setTimeout(() => {
-        login_page.classList.remove("animate-in");
-      }, 1500)
   }
 }
 
@@ -102,11 +98,14 @@ function load_search_page() {
       hide_all_pages();
       search_page.classList.remove("hidden");
       current_page = "search";
+  }
+}
 
-      search_page.classList.add("animate-in");
-      setTimeout(() => {
-        search_page.classList.remove("animate-in");
-      }, 1500)
+function load_searching_page() {
+  if(current_page != "searching" && logged_in == true) {
+      hide_all_pages();
+      searching_page.classList.remove("hidden");
+      current_page = "searching";
   }
 }
 
@@ -115,11 +114,6 @@ function load_connected_page() {
       hide_all_pages();
       connected_page.classList.remove("hidden");
       current_page = "connected";
-
-      connected_page.classList.add("animate-in");
-      setTimeout(() => {
-        connected_page.classList.remove("animate-in");
-      }, 1500)
   }
 }
 
