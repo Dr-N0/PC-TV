@@ -34,10 +34,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF6247AA),
       appBar: AppBar(
         title: const Text('PC TV'),
         backgroundColor: Colors.purple,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(30),
           ),
@@ -99,19 +100,15 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
+            tileMode: TileMode.mirror,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: <Color>[
-              Color.fromARGB(255, 255, 255, 255),
-              Color(0xff5b0060),
-              Color(0xff870160),
-              Color(0xffac255e),
-              Color(0xffca485c),
-              Color(0xffe16b5c),
-              Color(0xfff39060),
-              Color(0xffffb56b),
+              Color(0xFF6247AA),
+              Color(0xFFA06CD5),
+              Color(0xFFF67E7D)
             ],
-            tileMode: TileMode.mirror,
+            stops: [0.0, 0.4, 1],
           ),
         ),
       ),
