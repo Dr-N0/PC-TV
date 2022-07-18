@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pc_tv_phone/App.dart';
+import 'package:pc_tv_phone/screens/SignIn.dart';
 
 void main() => runApp(PCTV());
 
@@ -16,7 +16,7 @@ class PCTV extends StatelessWidget {
         primaryColor: const Color(0xFF6247AA),
         accentColor: const Color(0xFFA06CD5),
       ),
-      home: const App(),
+      home: SignIn(),
     );
   }
 }

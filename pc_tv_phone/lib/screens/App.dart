@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pc_tv_phone/InteractiveSquares.dart';
-import 'package:pc_tv_phone/LoginPage.dart';
-import 'package:pc_tv_phone/SettingsPage.dart';
+import 'package:pc_tv_phone/screens/InteractiveSquares.dart';
+import 'package:pc_tv_phone/screens/SignIn.dart';
+import 'package:pc_tv_phone/screens/SettingsPage.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -25,8 +25,7 @@ class _AppState extends State<App> {
       case 2:
         print("User Logged out");
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-            (route) => true);
+            MaterialPageRoute(builder: (context) => SignIn()), (route) => true);
         break;
     }
   }
