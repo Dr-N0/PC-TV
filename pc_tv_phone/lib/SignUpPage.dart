@@ -1,19 +1,19 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:pc_tv_phone/bezierContainer.dart';
-import 'package:pc_tv_phone/SignUpPage.dart';
+import 'package:pc_tv_phone/LoginPage.dart';
 
-import 'App.dart';
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key, this.title}) : super(key: key);
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String? title;
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Stack(
             children: <Widget>[
               Positioned(
-                top: -height * .15,
+                top: -MediaQuery.of(context).size.height * .15,
                 right: -MediaQuery.of(context).size.width * .4,
                 child: BezierContainer(),
               ),
@@ -39,28 +39,91 @@ class _LoginPageState extends State<LoginPage> {
                       RichText(
                         textAlign: TextAlign.center,
                         text: const TextSpan(
-                          text: 'PC',
+                          text: 'T',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w700,
-                            color: Colors.purple,
+                            color: Colors.lightBlue,
                           ),
                           children: [
                             TextSpan(
-                              text: 'TV',
+                              text: 'al',
                               style: TextStyle(
                                 color: Colors.black,
+                                fontSize: 30,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'k',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 30,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'lin',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'e',
+                              style: TextStyle(
+                                color: Colors.lightBlue,
                                 fontSize: 30,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(
+                        height: 50,
+                      ),
                       Column(
                         children: <Widget>[
-                          SizedBox(
-                            height: 80,
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "User Name",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                TextField(
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    hintText: "username",
+                                    suffixIcon: Icon(
+                                      Icons.person,
+                                      color: Colors.black54,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        15,
+                                      ),
+                                    ),
+                                    fillColor: Color(
+                                      0xfff3f3f4,
+                                    ),
+                                    filled: true,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(
@@ -70,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "Email",
+                                  "Email id",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -92,9 +155,6 @@ class _LoginPageState extends State<LoginPage> {
                                       color: Colors.black54,
                                     ),
                                     border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.red,
-                                      ),
                                       borderRadius: BorderRadius.circular(
                                         15,
                                       ),
@@ -109,7 +169,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
+                            margin: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -124,6 +186,10 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 10,
                                 ),
                                 TextField(
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                  textAlign: TextAlign.start,
                                   obscureText: true,
                                   decoration: InputDecoration(
                                     hintText: "password",
@@ -131,7 +197,49 @@ class _LoginPageState extends State<LoginPage> {
                                       Icons.visibility,
                                       color: Colors.black54,
                                     ),
-                                    // icon: Icon(Icons.lock),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        15,
+                                      ),
+                                    ),
+                                    fillColor: Color(
+                                      0xfff3f3f4,
+                                    ),
+                                    filled: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Confirm Password",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                TextField(
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                    hintText: "password",
+                                    suffixIcon: Icon(
+                                      Icons.visibility,
+                                      color: Colors.black54,
+                                    ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
                                         15,
@@ -152,9 +260,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 20,
                       ),
                       Container(
-                        width: MediaQuery.of(
-                          context,
-                        ).size.width,
+                        width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.symmetric(
                           vertical: 15,
                         ),
@@ -167,60 +273,41 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                                color: Colors.grey.shade200,
-                                offset: Offset(2, 4),
-                                blurRadius: 5,
-                                spreadRadius: 2),
+                              color: Colors.grey.shade200,
+                              offset: Offset(
+                                2,
+                                4,
+                              ),
+                              blurRadius: 5,
+                              spreadRadius: 2,
+                            )
                           ],
                           gradient: LinearGradient(
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
                             colors: const [
-                              Colors.purple,
-                              Colors.purpleAccent,
+                              Colors.blue,
+                              Colors.lightBlue,
                             ],
                           ),
                         ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => App(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                        alignment: Alignment.centerRight,
                         child: Text(
-                          'Forgot Password ?',
+                          'Register Now',
                           style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
                       InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SignUpPage(),
+                              builder: (context) => LoginPage(),
                             ),
                           );
                         },
@@ -228,15 +315,13 @@ class _LoginPageState extends State<LoginPage> {
                           margin: EdgeInsets.symmetric(
                             vertical: 20,
                           ),
-                          padding: EdgeInsets.all(
-                            15,
-                          ),
+                          padding: EdgeInsets.all(15),
                           alignment: Alignment.bottomCenter,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const <Widget>[
                               Text(
-                                'Don\'t have an account ?',
+                                'Already have an account ?',
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -246,7 +331,7 @@ class _LoginPageState extends State<LoginPage> {
                                 width: 10,
                               ),
                               Text(
-                                'Register',
+                                'Login',
                                 style: TextStyle(
                                   color: Color(
                                     0xFF0389F6,
@@ -283,8 +368,9 @@ class _LoginPageState extends State<LoginPage> {
                             bottom: 10,
                           ),
                           child: Icon(
-                            Icons.keyboard_arrow_left,
+                            Icons.arrow_left,
                             color: Colors.black,
+                            size: 30,
                           ),
                         ),
                         Text(
