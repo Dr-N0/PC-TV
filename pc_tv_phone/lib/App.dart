@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pc_tv_phone/BottomNavigation.dart';
-import 'package:pc_tv_phone/TabItem.dart';
-import 'package:pc_tv_phone/TabNavigator.dart';
+import 'package:pc_tv_phone/LoginPage.dart';
+import 'package:pc_tv_phone/SettingsPage.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -11,56 +10,86 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  var _currentTab = TabItem.red;
-  final _navigatorKeys = {
-    TabItem.red: GlobalKey<NavigatorState>(),
-    TabItem.green: GlobalKey<NavigatorState>(),
-    TabItem.blue: GlobalKey<NavigatorState>(),
-  };
+  int _currentTab = 0;
 
-  void _selectTab(TabItem tabItem) {
-    if (tabItem == _currentTab) {
-      // pop to first route
-      _navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
-    } else {
-      setState(() => _currentTab = tabItem);
+  void _selectTab(BuildContext context, item) {
+    switch (item) {
+      case 0:
+        print("Settings Clicked");
+        break;
+      case 1:
+        print("Privacy Clicked");
+        break;
+      case 2:
+        print("User Logged out");
+        break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        final isFirstRouteInCurrentTab =
-            !await _navigatorKeys[_currentTab]!.currentState!.maybePop();
-        if (isFirstRouteInCurrentTab) {
-          // if not on the 'main' tab
-          if (_currentTab != TabItem.red) {
-            // select 'main' tab
-            _selectTab(TabItem.red);
-            // back button handled by app
-            return false;
-          }
-        }
-        // let system handle back button if we're on the first route
-        return isFirstRouteInCurrentTab;
-      },
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          tileMode: TileMode.mirror,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Color(0xFF6247AA),
+            Color(0xFFA06CD5),
+            Color(0xFFF67E7D)
+          ],
+          stops: [0.0, 0.4, 1],
+        ),
+      ),
       child: Scaffold(
-        body: Stack(children: <Widget>[
-          _buildOffstageNavigator(TabItem.red),
-          _buildOffstageNavigator(TabItem.green),
-          _buildOffstageNavigator(TabItem.blue),
-        ]),
-        bottomNavigationBar: BottomNavigation(
-          currentTab: _currentTab,
-          onSelectTab: _selectTab,
+        backgroundColor: Colors.transparent,
+        body: _buildBody(),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: Colors.red,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.change_circle),
+              label: 'Change Computer',
+              backgroundColor: Colors.green,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+              backgroundColor: Colors.purple,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.logout),
+              label: 'Logout',
+              backgroundColor: Colors.pink,
+            ),
+          ],
+          currentIndex: _currentTab,
+          selectedItemColor: Colors.black,
+          onTap: (item) => _selectTab(context, item),
         ),
       ),
     );
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Container(
+
+  Widget _buildBody() {
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Container(child: Text('asdf')),
+        ],
+      ),
+    );
+  }
+}
+
+
+//   return Container(
   //     decoration: const BoxDecoration(
   //       gradient: LinearGradient(
   //         tileMode: TileMode.mirror,
@@ -77,33 +106,33 @@ class _AppState extends State<App> {
   //     child: Scaffold(
   //       backgroundColor: Colors.transparent,
   //       body: _buildBody(),
-  //       bottomNavigationBar: BottomNavigationBar(
-  //         items: const <BottomNavigationBarItem>[
-  //           BottomNavigationBarItem(
-  //             icon: Icon(Icons.home),
-  //             label: 'Home',
-  //             backgroundColor: Colors.red,
-  //           ),
-  //           BottomNavigationBarItem(
-  //             icon: Icon(Icons.change_circle),
-  //             label: 'Change Computer',
-  //             backgroundColor: Colors.green,
-  //           ),
-  //           BottomNavigationBarItem(
-  //             icon: Icon(Icons.settings),
-  //             label: 'Settings',
-  //             backgroundColor: Colors.purple,
-  //           ),
-  //           BottomNavigationBarItem(
-  //             icon: Icon(Icons.logout),
-  //             label: 'Logout',
-  //             backgroundColor: Colors.pink,
-  //           ),
-  //         ],
-  //         currentIndex: _currentTab,
-  //         selectedItemColor: Colors.black,
-  //         onTap: (item) => _selectTab(context, item),
-  //       ),
+        // bottomNavigationBar: BottomNavigationBar(
+        //   items: const <BottomNavigationBarItem>[
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.home),
+        //       label: 'Home',
+        //       backgroundColor: Colors.red,
+        //     ),
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.change_circle),
+        //       label: 'Change Computer',
+        //       backgroundColor: Colors.green,
+        //     ),
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.settings),
+        //       label: 'Settings',
+        //       backgroundColor: Colors.purple,
+        //     ),
+        //     BottomNavigationBarItem(
+        //       icon: Icon(Icons.logout),
+        //       label: 'Logout',
+        //       backgroundColor: Colors.pink,
+        //     ),
+        //   ],
+        //   currentIndex: _currentTab,
+        //   selectedItemColor: Colors.black,
+        //   onTap: (item) => _selectTab(context, item),
+        // ),
   //     ),
   //   );
   // }
@@ -127,20 +156,6 @@ class _AppState extends State<App> {
   //     ),
   //   );
   // }
-
-  Widget _buildOffstageNavigator(TabItem tabItem) {
-    return Offstage(
-      offstage: _currentTab != tabItem,
-      child: TabNavigator(
-        navigatorKey: _navigatorKeys[tabItem],
-        tabItem: tabItem,
-      ),
-    );
-  }
-}
-
-
-
 
 // backgroundColor: const Color(0xFF6247AA),
 // appBar: AppBar(
