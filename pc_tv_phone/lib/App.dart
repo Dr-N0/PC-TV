@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pc_tv_phone/InteractiveSquares.dart';
 import 'package:pc_tv_phone/LoginPage.dart';
 import 'package:pc_tv_phone/SettingsPage.dart';
 
@@ -13,6 +14,9 @@ class _AppState extends State<App> {
   int _currentTab = 0;
 
   void _selectTab(BuildContext context, item) {
+    setState(() {
+      _currentTab = item;
+    });
     switch (item) {
       case 0:
         print("Settings Clicked");
@@ -44,34 +48,19 @@ class _AppState extends State<App> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: _buildBody(),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-              backgroundColor: Colors.red,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.change_circle),
-              label: 'Change Computer',
-              backgroundColor: Colors.green,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
-              backgroundColor: Colors.purple,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.logout),
-              label: 'Logout',
-              backgroundColor: Colors.pink,
-            ),
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          items: [
+            _buildNavBarItem(Icons.settings, 'Settings', Colors.black),
+            _buildNavBarItem(Icons.logout, 'Logout', Colors.black),
           ],
           currentIndex: _currentTab,
           selectedItemColor: Colors.black,
           onTap: (item) => _selectTab(context, item),
         ),
+        body: _buildBody(),
       ),
     );
   }
@@ -79,11 +68,37 @@ class _AppState extends State<App> {
   Widget _buildBody() {
     return SafeArea(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Container(child: Text('asdf')),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildTopBarItem(Icons.volume_up, 'Computer Sound Info'),
+              _buildTopBarItem(Icons.computer, 'Battery Levels'),
+              _buildTopBarItem(Icons.change_circle, 'Change Computer'),
+            ],
+          ),
+          Flexible(child: InteractiveSquares()),
         ],
       ),
+    );
+  }
+
+  IconButton _buildTopBarItem(IconData icon, String name) {
+    return IconButton(
+      icon: Icon(icon),
+      tooltip: name,
+      onPressed: () {},
+    );
+  }
+
+  BottomNavigationBarItem _buildNavBarItem(IconData icon, String name, color) {
+    return BottomNavigationBarItem(
+      icon: Icon(
+        icon,
+        color: color,
+      ),
+      label: name,
     );
   }
 }
