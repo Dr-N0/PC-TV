@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pc_tv_phone/provider/AuthProvider.dart';
 import 'package:pc_tv_phone/screens/SignIn.dart';
+import 'package:pc_tv_phone/screens/App.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key? key, this.title}) : super(key: key);
@@ -102,8 +103,7 @@ class _SignUpState extends State<SignUp> {
   Widget _createAccountLabel() {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignIn()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => App()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),
