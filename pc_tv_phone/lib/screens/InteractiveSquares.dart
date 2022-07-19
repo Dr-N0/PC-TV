@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class InteractiveSquares extends StatefulWidget {
   const InteractiveSquares({Key? key}) : super(key: key);
@@ -8,17 +9,24 @@ class InteractiveSquares extends StatefulWidget {
 }
 
 class _InteractiveSquaresState extends State<InteractiveSquares> {
-  List<Widget> _squareList = [];
+  final List<Widget> _squareList = <Widget>[];
+  final ScrollController _scrollController = ScrollController();
 
-  void _addCustomSquare() {
+  void _addCustomSquare() async {
     setState(() {
       _squareList.add(_square());
     });
+
+    await _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
   Widget _square() {
     return Container(
-      padding: const EdgeInsets.all(40),
+      width: MediaQuery.of(context).size.width / 2,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Colors.purple,
@@ -28,7 +36,9 @@ class _InteractiveSquaresState extends State<InteractiveSquares> {
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          print(_scrollController.positions);
+        },
         child: Text('Click'),
       ),
     );
@@ -39,17 +49,24 @@ class _InteractiveSquaresState extends State<InteractiveSquares> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 300,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20),
-            itemCount: _squareList.length,
-            itemBuilder: (BuildContext ctx, index) {
-              return _squareList[index];
-            }),
+          primary: false,
+          padding: const EdgeInsets.all(20),
+          scrollDirection: Axis.horizontal,
+          controller: _scrollController,
+          gridDelegate: SliverWovenGridDelegate.count(
+            crossAxisCount: 3,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            pattern: [
+              WovenGridTile(1),
+            ],
+          ),
+          itemCount: _squareList.length,
+          itemBuilder: (BuildContext ctx, index) {
+            return _squareList[index];
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addCustomSquare,

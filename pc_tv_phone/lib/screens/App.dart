@@ -11,7 +11,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  var appBarHeight = AppBar().preferredSize.height;
+  var appBarHeight = AppBar().preferredSize.height + 10;
 
   void selectedItem(BuildContext context, item) {
     switch (item) {
@@ -71,15 +71,8 @@ class _AppState extends State<App> {
           ),
           child: Column(
             children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                        width: 3.0, color: Color.fromARGB(132, 32, 1, 22)),
-                  ),
-                  color: Colors.transparent,
-                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -92,7 +85,7 @@ class _AppState extends State<App> {
                           iconTheme: const IconThemeData(color: Colors.white)),
                       child: PopupMenuButton<int>(
                         color: Colors.white,
-                        offset: Offset(0.0, appBarHeight + 10),
+                        offset: Offset(0.0, appBarHeight),
                         itemBuilder: (context) => [
                           const PopupMenuItem<int>(
                               value: 0, child: Text("Settings")),
@@ -120,7 +113,20 @@ class _AppState extends State<App> {
                   ],
                 ),
               ),
-              Flexible(child: InteractiveSquares()),
+              // TODO:
+              // Box spawn in z form (New import?)
+              // Box sizing change to be symetrical (Revamp squaresfunc)
+              // Grid needs to snap per 2 columns (PageController?)
+              // Indicator at bottom for created columns
+              // Button turns into popup dialog for custom button
+              Flexible(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: const Center(
+                    child: InteractiveSquares(),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
