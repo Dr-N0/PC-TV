@@ -13,36 +13,29 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   var appBarHeight = AppBar().preferredSize.height + 10;
 
-  void selectedItem(BuildContext context, item) {
-    switch (item) {
-      case 0:
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const SettingsPage()));
-        break;
-      case 1:
-        print("Privacy Clicked");
-        break;
-      case 2:
-        print("User Logged out");
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => SignIn()), (route) => true);
-        break;
-    }
+  void test() {
+    print("Privacy Clicked");
   }
 
-  SizedBox _buildTopBarItem(IconData icon, String name) {
+  SizedBox _buildTopBarItem(IconData icon, String name, clicked) {
     return SizedBox.fromSize(
-      size: Size(50, 50),
+      size: const Size(50, 50),
       child: ClipOval(
         child: Material(
-          color: Color(0xFFF67E7D),
+          color: Colors.transparent,
           child: InkWell(
-            splashColor: Colors.green,
-            onTap: () {},
+            splashColor: const Color(0xFFF67E7D),
+            onTap: () {
+              clicked();
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(icon),
+                Icon(
+                  icon,
+                  color: const Color(0xFFF67E7D),
+                  size: 40,
+                ),
               ],
             ),
           ),
@@ -72,52 +65,20 @@ class _AppState extends State<App> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildTopBarItem(Icons.volume_up, 'Computer Sound Info'),
-                    _buildTopBarItem(Icons.computer, 'Battery Levels'),
-                    _buildTopBarItem(Icons.change_circle, 'Change Computer'),
-                    Theme(
-                      data: Theme.of(context).copyWith(
-                          dividerColor: Colors.black,
-                          iconTheme: const IconThemeData(color: Colors.white)),
-                      child: PopupMenuButton<int>(
-                        color: Colors.white,
-                        offset: Offset(0.0, appBarHeight),
-                        itemBuilder: (context) => [
-                          const PopupMenuItem<int>(
-                              value: 0, child: Text("Settings")),
-                          const PopupMenuItem<int>(
-                              value: 1, child: Text("Privacy Policy page")),
-                          const PopupMenuDivider(),
-                          PopupMenuItem<int>(
-                              value: 2,
-                              child: Row(
-                                children: const [
-                                  Icon(
-                                    Icons.logout,
-                                    color: Colors.red,
-                                  ),
-                                  SizedBox(
-                                    width: 7,
-                                  ),
-                                  Text("Logout")
-                                ],
-                              )),
-                        ],
-                        onSelected: (item) => selectedItem(context, item),
-                      ),
-                    ),
+                    _buildTopBarItem(
+                        Icons.volume_up, 'Computer Sound Info', test),
+                    _buildTopBarItem(Icons.computer, 'Battery Levels', test),
+                    _buildTopBarItem(
+                        Icons.change_circle, 'Change Computer', test),
+                    _buildTopBarItem(Icons.logout, 'Log out', test),
                   ],
                 ),
               ),
               // TODO:
-              // Box spawn in z form (New import?)
-              // Box sizing change to be symetrical (Revamp squaresfunc)
-              // Grid needs to snap per 2 columns (PageController?)
-              // Indicator at bottom for created columns
               // Button turns into popup dialog for custom button
               Flexible(
                 child: SizedBox(

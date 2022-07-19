@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class InteractiveSquares extends StatefulWidget {
   const InteractiveSquares({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class _InteractiveSquaresState extends State<InteractiveSquares> {
       _squareList.add(_square());
     });
 
-    await _scrollController.animateTo(
+    _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
       curve: Curves.easeOut,
       duration: const Duration(milliseconds: 300),
@@ -26,10 +25,11 @@ class _InteractiveSquaresState extends State<InteractiveSquares> {
 
   Widget _square() {
     return Container(
-      width: MediaQuery.of(context).size.width / 2,
+      padding: const EdgeInsets.all(8),
+      width: 100,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Colors.purple,
+          primary: const Color.fromARGB(207, 155, 39, 176),
           textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           shape: const ContinuousRectangleBorder(
             side: BorderSide.none,
@@ -37,7 +37,7 @@ class _InteractiveSquaresState extends State<InteractiveSquares> {
           ),
         ),
         onPressed: () {
-          print(_scrollController.positions);
+          print('square tapped');
         },
         child: Text('Click'),
       ),
@@ -51,16 +51,12 @@ class _InteractiveSquaresState extends State<InteractiveSquares> {
       body: Center(
         child: GridView.builder(
           primary: false,
-          padding: const EdgeInsets.all(20),
-          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.all(30),
           controller: _scrollController,
-          gridDelegate: SliverWovenGridDelegate.count(
-            crossAxisCount: 3,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            pattern: [
-              WovenGridTile(1),
-            ],
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
           ),
           itemCount: _squareList.length,
           itemBuilder: (BuildContext ctx, index) {
@@ -71,7 +67,7 @@ class _InteractiveSquaresState extends State<InteractiveSquares> {
       floatingActionButton: FloatingActionButton(
         onPressed: _addCustomSquare,
         tooltip: 'Add',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
