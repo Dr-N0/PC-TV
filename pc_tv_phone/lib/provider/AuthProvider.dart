@@ -32,7 +32,7 @@ class AuthProvider with ChangeNotifier {
     print(_name);
 
     String body = json.encode(data1);
-    var url = Uri.parse('send');
+    var url = Uri.parse('http://10.0.2.2:5000/api/pc_searching');
     var response = await http.post(
       url,
       body: body,
@@ -85,7 +85,7 @@ class AuthProvider with ChangeNotifier {
 
     String body = json.encode(data);
 
-    var url = Uri.parse('register');
+    var url = Uri.parse('http://10.0.2.2:5000/api/pc_searching');
     var response = await http.post(
       url,
       body: body,
@@ -116,7 +116,7 @@ class AuthProvider with ChangeNotifier {
     };
 
     notifyListeners();
-    var url = Uri.parse('login');
+    var url = Uri.parse('http://10.0.2.2:5000/api/pc_searching');
 
     Response response = await post(
       url,
