@@ -14,7 +14,8 @@ class _AppState extends State<App> {
   var appBarHeight = AppBar().preferredSize.height + 10;
 
   void test() {
-    print("Privacy Clicked");
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => SignIn()), (route) => true);
   }
 
   SizedBox _buildTopBarItem(IconData icon, String name, clicked) {

@@ -18,7 +18,7 @@ class PCTV extends StatelessWidget {
         primaryColor: const Color(0xFF6247AA),
         accentColor: const Color(0xFFA06CD5),
       ),
-      home: App(),
+      home: SignIn(),
     );
   }
 }
