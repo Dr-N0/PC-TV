@@ -18,23 +18,33 @@ class _SignInState extends State<SignIn> {
   Widget _entryEmailField(String title) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+      child: Padding(
+        // padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: TextField(
+          controller: emailController,
+          // style: TextStyle(color: Color(0xFFF67E7D)),
+          decoration: InputDecoration(
+            labelText: 'Email',
+            labelStyle: new TextStyle(color: Color.fromARGB(255, 80, 80, 80)),
+            hintText: 'Enter valid email but in bold',
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            // Focused Border
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFA06CD5), width: 5),
+            ),
+            // Error Border
+            errorBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.yellow, width: 5),
+            ),
+            // Focused Error Border
+            focusedErrorBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 5),
+            ),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-              controller: emailController,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
+        ),
       ),
     );
   }
@@ -42,104 +52,57 @@ class _SignInState extends State<SignIn> {
   Widget _entryPasswordField(String title, {bool isPassword = false}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          //name textfield
-          Container(
-            child: TextField(
-              controller: passController,
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true),
+      child: Padding(
+        padding:
+            const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+        //padding: EdgeInsets.symmetric(horizontal: 15),
+        child: TextField(
+          obscureText: true,
+          controller: passController,
+          // style: TextStyle(color: Color(0xFFF67E7D)),
+          decoration: InputDecoration(
+            labelText: 'Password',
+            labelStyle: new TextStyle(color: Color.fromARGB(255, 80, 80, 80)),
+            hintText: 'Enter secure password',
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            // Focused Border
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFA06CD5), width: 5),
+            ),
+            // Error Border
+            errorBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.yellow, width: 5),
+            ),
+            // Focused Error Border
+            focusedErrorBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 5),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _submitButton() {
     return Center(
-      child: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: <Color>[
-                    Color.fromARGB(255, 96, 8, 198),
-                    Color.fromARGB(255, 70, 6, 149),
-                    Color.fromARGB(255, 92, 43, 152),
-                  ],
-                ),
-              ),
-            ),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xFFF67E7D),
+          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
           ),
-          TextButton(
-              style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(16.0),
-                  primary: Colors.white,
-                  textStyle: const TextStyle(fontSize: 20)),
-              onPressed: () {
-                AuthProvider().login(emailController.text, passController.text);
-              },
-              child: const Text('Sign in')),
-        ],
-      ),
-    );
-  }
-
-  Widget _createAccountLabel() {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUp()));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
-        alignment: Alignment.bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Create A New Account',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            ),
-          ],
         ),
+        child: const Text(
+          'Submit',
+          style: TextStyle(fontSize: 24),
+        ),
+        onPressed: () {
+          AuthProvider().login(emailController.text, passController.text);
+        },
       ),
-    );
-  }
-
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: 'Welcome back\n',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-          ),
-          children: [
-            TextSpan(
-                text: "Continue with Email",
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Colors.grey,
-                ))
-          ]),
     );
   }
 
@@ -157,7 +120,8 @@ class _SignInState extends State<SignIn> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        width: double.infinity,
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             tileMode: TileMode.mirror,
             begin: Alignment.topCenter,
@@ -169,36 +133,82 @@ class _SignInState extends State<SignIn> {
             stops: [0.0, 0.5],
           ),
         ),
-        height: height,
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: height * .2),
-                    _title(),
-                    SizedBox(height: 50),
-                    _emailPasswordWidget(),
-                    SizedBox(height: 5),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      alignment: Alignment.centerRight,
-                      child: Text('Forgot Password ?',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500)),
-                    ),
-                    SizedBox(height: 30),
-                    _submitButton(),
-                    SizedBox(height: height * .055),
-                    _createAccountLabel(),
-                  ],
-                ),
+            SizedBox(
+              height: 80,
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Login",
+                    style: TextStyle(color: Colors.white, fontSize: 40),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Welcome Back",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ],
               ),
             ),
+            SizedBox(height: 20),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(60),
+                        topRight: Radius.circular(60))),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 60,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color.fromARGB(75, 246, 126, 125),
+                                    blurRadius: 20,
+                                    offset: Offset(0, 10))
+                              ]),
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(height: 20),
+                              _emailPasswordWidget(),
+                              SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Text(
+                          "Forgot Password?",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        _submitButton(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
