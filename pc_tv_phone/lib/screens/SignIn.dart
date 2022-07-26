@@ -97,7 +97,7 @@ class _SignInState extends State<SignIn> {
         ),
         child: const Text(
           'Submit',
-          style: TextStyle(fontSize: 24),
+          style: TextStyle(fontSize: 20),
         ),
         onPressed: () {
           AuthProvider().login(emailController.text, passController.text);
@@ -195,9 +195,14 @@ class _SignInState extends State<SignIn> {
                         SizedBox(
                           height: 40,
                         ),
-                        Text(
-                          "Forgot Password?",
-                          style: TextStyle(color: Colors.grey),
+                        TextButton(
+                          style: TextButton.styleFrom(primary: Colors.grey),
+                          child: Text("Forgot Password?"),
+                          onPressed: () => Navigator.of(context)
+                              .pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => SignUp()),
+                                  (route) => true),
                         ),
                         SizedBox(
                           height: 40,
