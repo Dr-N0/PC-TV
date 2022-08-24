@@ -27,7 +27,7 @@ class _SignInState extends State<SignIn> {
           decoration: InputDecoration(
             labelText: 'Email',
             labelStyle: new TextStyle(color: Color.fromARGB(255, 80, 80, 80)),
-            hintText: 'Enter valid email but in bold',
+            hintText: 'Enter valid email',
             enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
             ),
